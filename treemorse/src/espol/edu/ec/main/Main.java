@@ -8,10 +8,16 @@ package espol.edu.ec.main;
 import espol.edu.ec.tda.Const;
 import espol.edu.ec.tda.TreeMorse;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -40,18 +46,26 @@ public class Main extends Application{
         HBox box = new HBox(10, new Text("Texto"),input, btn, reiniciar);
         box.setAlignment(Pos.CENTER); 
         VBox v = new VBox(5, text, box, tm);
+        v.setBackground(new Background(new BackgroundFill(Color.DIMGRAY, CornerRadii.EMPTY, Insets.EMPTY))); 
         v.setAlignment(Pos.CENTER); 
         stage.setScene(new Scene(v, Const.MAX_WIDTH, Const.MAX_HEIGHT));
          
-        
-        
         btn.setOnAction(e-> {
-            
-            tm.reproducir(input.getText()); 
+            try{
+                tm.reproducir(input.getText());
+            }catch(NullPointerException ex){
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setContentText("El caracter ingresado no es válido");
+                alert.setTitle("Error");
+                alert.setHeaderText("Error!");
+                alert.show();
+                input.setText(""); 
+            }
         });
         
         reiniciar.setOnAction(e ->{
             tm.reiniciar();
+            input.setText(""); 
         }); 
         stage.show();
     }

@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
@@ -28,11 +29,11 @@ import javafx.util.Duration;
  */
 public class TreeMorse extends Pane {
     
-    private Node root;
+    private final Node root;
     HashMap<String, String[]> map;
     Timeline tl;
-    private AudioClip linea;
-    private AudioClip punto;
+    private final AudioClip linea;
+    private final AudioClip punto;
     
     public TreeMorse() {
         root = new Node("Inicio");
@@ -44,9 +45,8 @@ public class TreeMorse extends Pane {
         tl = new Timeline();
         linea = new AudioClip(TreeMorse.class.getResource("/espol/edu/ec/recursos/linea.mp3").toExternalForm());
         punto = new AudioClip(TreeMorse.class.getResource("/espol/edu/ec/recursos/punto.mp3").toExternalForm());
-        for(String key: map.keySet()) {
-            crearArbol(root, map.get(key), key, 0, map.get(key).length, Const.MAX_WIDTH);
-        }
+        for(Map.Entry<String, String[]> m: map.entrySet())
+            crearArbol(root, m.getValue(), m.getKey(), 0, m.getValue().length, Const.MAX_WIDTH);
         String[] s = {" "};
         map.put(" ", s);
     }
@@ -97,6 +97,7 @@ public class TreeMorse extends Pane {
     
     private void reproducir(String word, int start, int end){
         if(start == end){
+            return ;
         }else
             reproducir(root, map.get(word.charAt(start)+""), 0, map.get(word.charAt(start)+"").length, word, start, end);
     }
@@ -106,48 +107,35 @@ public class TreeMorse extends Pane {
         tl.stop();
         tl.getKeyFrames().clear();
         if(i == j) {
-            if(array[i-1].equals("-")){
-                KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.ORANGE);
-                KeyFrame kf = new KeyFrame(Duration.millis(300), e-> reproducir(word, start+1, end), kv);
-                tl.getKeyFrames().add(kf);
-                tl.setAutoReverse(false);
-                tl.setCycleCount(1);
-                tl.play();
-            }else {     
-                KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.ORANGE);
-                KeyFrame kf = new KeyFrame(Duration.millis(300), e-> reproducir(word, start+1, end), kv);
-                tl.getKeyFrames().add(kf);
-                tl.setAutoReverse(false);
-                tl.setCycleCount(1);
-                tl.play(); 
-                
-            }
+            KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.ORANGE);
+            KeyFrame kf = new KeyFrame(Duration.millis(300), e-> reproducir(word, start+1, end), kv);
+            configurarTimeline(kf, false);
         }else if(array[i].equals("-")){ 
-
             KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.WHITE);
-            KeyFrame kf = new KeyFrame(Duration.millis(1200), 
+            KeyFrame kf = new KeyFrame(Duration.millis(1000), 
                     e -> decolorear(node.getLeft(), array, i+1, j, word, start, end, 350), kv);
-            tl.getKeyFrames().add(kf);
-            tl.setAutoReverse(false);
-            tl.setCycleCount(1);
-            tl.play();
+            configurarTimeline(kf, false);
         }else if(array[i].equals(".")){
-
             KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.WHITE);
             KeyFrame kf = new KeyFrame(Duration.millis(700), 
                     e -> decolorear(node.getRight(), array, i+1, j, word, start, end, 200), kv);
-            tl.getKeyFrames().add(kf);
-            tl.setAutoReverse(false);
-            tl.setCycleCount(1);
-            tl.play();
+            configurarTimeline(kf, false);
         }else if(array[i].equals(" ")){
             try {
                 Thread.sleep(900);
                 reproducir(word, start+1, end);
             } catch (InterruptedException ex) {
+                Thread.currentThread().interrupt();
                 Logger.getLogger(TreeMorse.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+    }
+    
+    private void configurarTimeline(KeyFrame kf, boolean b) {
+        tl.getKeyFrames().add(kf);
+        tl.setAutoReverse(b);
+        tl.setCycleCount(1);
+        tl.play();
     }
     
     private void decolorear(Node node, String[] array, int i, int j, String word, int start, int end, double ms) {
@@ -156,10 +144,7 @@ public class TreeMorse extends Pane {
         KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.ORANGE);
         KeyFrame kf = new KeyFrame(Duration.millis(ms), 
                 e -> reproducir(node, array, i, j, word, start, end), kv);
-        tl.getKeyFrames().add(kf);
-        tl.setAutoReverse(true);
-        tl.setCycleCount(1);
-        tl.play();
+        configurarTimeline(kf, true);
         linea.stop();
         punto.stop();
         if(ms == 200)
@@ -181,7 +166,7 @@ public class TreeMorse extends Pane {
                 mapa.put(key, data);
             }
         }catch(IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(TreeMorse.class.getName()).log(Level.SEVERE, null, ex); 
         }
         return mapa;
     }
@@ -192,7 +177,7 @@ public class TreeMorse extends Pane {
    
     private void recorrer(Node node) {
         if(node == null){
-        
+            return ;
         }else {
             node.setFill(Color.WHITE); 
             recorrer(node.getLeft());
