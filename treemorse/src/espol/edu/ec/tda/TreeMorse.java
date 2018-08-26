@@ -126,7 +126,7 @@ public class TreeMorse extends Pane {
 
             KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.WHITE);
             KeyFrame kf = new KeyFrame(Duration.millis(1200), 
-                    e -> decolorear(node.getLeft(), array, i+1, j, word, start, end, 1200), kv);
+                    e -> decolorear(node.getLeft(), array, i+1, j, word, start, end, 350), kv);
             tl.getKeyFrames().add(kf);
             tl.setAutoReverse(false);
             tl.setCycleCount(1);
@@ -135,14 +135,14 @@ public class TreeMorse extends Pane {
 
             KeyValue kv = new KeyValue(node.getContent().fillProperty(), Color.WHITE);
             KeyFrame kf = new KeyFrame(Duration.millis(700), 
-                    e -> decolorear(node.getRight(), array, i+1, j, word, start, end, 700), kv);
+                    e -> decolorear(node.getRight(), array, i+1, j, word, start, end, 200), kv);
             tl.getKeyFrames().add(kf);
             tl.setAutoReverse(false);
             tl.setCycleCount(1);
             tl.play();
         }else if(array[i].equals(" ")){
             try {
-                Thread.sleep(1500);
+                Thread.sleep(900);
                 reproducir(word, start+1, end);
             } catch (InterruptedException ex) {
                 Logger.getLogger(TreeMorse.class.getName()).log(Level.SEVERE, null, ex);
@@ -162,7 +162,7 @@ public class TreeMorse extends Pane {
         tl.play();
         linea.stop();
         punto.stop();
-        if(ms == 500)
+        if(ms == 200)
             punto.play();
         else
             linea.play();

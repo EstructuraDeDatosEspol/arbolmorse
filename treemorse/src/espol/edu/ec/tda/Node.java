@@ -53,7 +53,7 @@ public class Node extends StackPane{
         timeline.stop();
         timeline.getKeyFrames().clear();
         KeyValue kv = new KeyValue(content.fillProperty(), color);
-        KeyFrame kf = new KeyFrame(Duration.millis(1000), kv);
+        KeyFrame kf = new KeyFrame(Duration.millis(700), kv);
         timeline.setAutoReverse(true);
         timeline.setCycleCount(2);
         timeline.getKeyFrames().add(kf);
@@ -64,7 +64,7 @@ public class Node extends StackPane{
         timeline.stop();
         timeline.getKeyFrames().clear();
         KeyValue kv = new KeyValue(content.fillProperty(), color);
-        KeyFrame kf = new KeyFrame(Duration.millis(2000), kv);
+        KeyFrame kf = new KeyFrame(Duration.millis(1000), kv);
         timeline.getKeyFrames().add(kf);
         timeline.setAutoReverse(true);
         timeline.setCycleCount(2);
