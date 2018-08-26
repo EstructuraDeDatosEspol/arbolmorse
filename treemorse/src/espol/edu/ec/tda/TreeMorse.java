@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
@@ -99,7 +100,15 @@ public class TreeMorse extends Pane {
         if(start == end){
             return ;
         }else
-            reproducir(root, map.get(word.charAt(start)+""), 0, map.get(word.charAt(start)+"").length, word, start, end);
+            try{
+                reproducir(root, map.get(word.charAt(start)+""), 0, map.get(word.charAt(start)+"").length, word, start, end);
+            }catch(NullPointerException ex){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("El caracter ingresado no es válido");
+                alert.setTitle("Error");
+                alert.setHeaderText("Error!");
+                alert.show();
+            }
     }
    
     

@@ -2,5 +2,5 @@ projectKey=teampatinio
 serverUrl=http://localhost:9000
 serverVersion=6.7.1.35068
 dashboardUrl=http://localhost:9000/dashboard/index/teampatinio
-ceTaskId=AWV37TFrDeCPFfC78td0
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AWV37TFrDeCPFfC78td0
+ceTaskId=AWV4AL_6DeCPFfC78td2
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AWV4AL_6DeCPFfC78td2

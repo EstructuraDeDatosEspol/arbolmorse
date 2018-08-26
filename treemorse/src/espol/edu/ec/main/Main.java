@@ -11,8 +11,6 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Background;
@@ -50,18 +48,7 @@ public class Main extends Application{
         v.setAlignment(Pos.CENTER); 
         stage.setScene(new Scene(v, Const.MAX_WIDTH, Const.MAX_HEIGHT));
          
-        btn.setOnAction(e-> {
-            try{
-                tm.reproducir(input.getText());
-            }catch(NullPointerException ex){
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setContentText("El caracter ingresado no es válido");
-                alert.setTitle("Error");
-                alert.setHeaderText("Error!");
-                alert.show();
-                input.setText(""); 
-            }
-        });
+        btn.setOnAction(e-> tm.reproducir(input.getText()));
         
         reiniciar.setOnAction(e ->{
             tm.reiniciar();
